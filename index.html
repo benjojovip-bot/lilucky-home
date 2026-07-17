@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ben · 一个爱写字的人</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FBEFE0;
+    --bg-soft: #FFF8EE;
+    --ink: #3A2A3D;
+    --ink-soft: #6B5B6E;
+    --gold: #E8A33D;
+    --coral: #E2665A;
+    --teal: #3E7C74;
+    --ring: rgba(232, 163, 61, 0.45);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Figtree', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 6vh 24px;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* 背景纹理：极淡的暖色噪点感光晕，不抢主体 */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 15% 10%, rgba(226, 102, 90, 0.10), transparent 60%),
+      radial-gradient(ellipse 50% 40% at 90% 85%, rgba(62, 124, 116, 0.08), transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 560px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  /* 抽象光斑：代替头像的签名元素 */
+  .orb-wrap {
+    width: 132px;
+    height: 132px;
+    margin-bottom: 36px;
+    position: relative;
+  }
+
+  .orb {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--coral) 55%, #F0C36D 100%);
+    filter: saturate(1.05);
+    animation: morph 9s ease-in-out infinite, breathe 6s ease-in-out infinite;
+    box-shadow: 0 20px 60px -15px rgba(226, 102, 90, 0.55);
+  }
+
+  .orb-glow {
+    position: absolute;
+    inset: -18px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(232, 163, 61, 0.35), transparent 70%);
+    animation: breathe 6s ease-in-out infinite;
+    z-index: -1;
+  }
+
+  @keyframes morph {
+    0%, 100% { border-radius: 42% 58% 65% 35% / 45% 45% 55% 55%; }
+    25%      { border-radius: 62% 38% 45% 55% / 60% 35% 65% 40%; }
+    50%      { border-radius: 40% 60% 55% 45% / 35% 60% 40% 65%; }
+    75%      { border-radius: 55% 45% 35% 65% / 55% 40% 60% 45%; }
+  }
+
+  @keyframes breathe {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.06); }
+  }
+
+  .eyebrow {
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--teal);
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(2.1rem, 5vw, 3rem);
+    line-height: 1.15;
+    margin: 0 0 18px;
+    color: var(--ink);
+  }
+
+  h1 em {
+    font-style: italic;
+    font-weight: 500;
+    color: var(--coral);
+  }
+
+  .tagline {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    max-width: 420px;
+    margin: 0 0 40px;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    justify-content: center;
+    margin-bottom: 56px;
+  }
+
+  .btn {
+    font-family: 'Figtree', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    padding: 13px 26px;
+    border-radius: 999px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-primary {
+    background: var(--ink);
+    color: var(--bg-soft);
+    box-shadow: 0 10px 30px -12px rgba(58, 42, 61, 0.5);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 34px -12px rgba(58, 42, 61, 0.6);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--ink);
+    border: 1.5px solid rgba(58, 42, 61, 0.25);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--teal);
+    color: var(--teal);
+    transform: translateY(-2px);
+  }
+
+  .btn:focus-visible {
+    outline: 3px solid var(--ring);
+    outline-offset: 3px;
+  }
+
+  .bio {
+    background: var(--bg-soft);
+    border-radius: 20px;
+    padding: 28px 30px;
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: var(--ink-soft);
+    box-shadow: 0 1px 0 rgba(58, 42, 61, 0.05) inset;
+    max-width: 460px;
+  }
+
+  .bio strong {
+    color: var(--ink);
+  }
+
+  footer {
+    margin-top: 48px;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+    opacity: 0.7;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .orb, .orb-glow {
+      animation: none;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .bio { padding: 22px 20px; }
+  }
+</style>
+</head>
+<body>
+
+  <main class="page">
+    <div class="orb-wrap">
+      <div class="orb-glow"></div>
+      <div class="orb"></div>
+    </div>
+
+    <p class="eyebrow">Hi, 欢迎来到我的小角落</p>
+
+    <h1>我是 Ben，<br>喜欢把<em>想法</em>写下来</h1>
+
+    <p class="tagline">
+      这里是我的个人主页。平时会在博客里记录一些思考、折腾过的东西，和一些不成熟的小结论。
+    </p>
+
+    <div class="links">
+      <a class="btn btn-primary" href="https://blog.lilucky.com">
+        读读我的博客 →
+      </a>
+      <a class="btn btn-secondary" href="mailto:contact@lilucky.com">
+        写信给我
+      </a>
+    </div>
+
+    <div class="bio">
+      <strong>关于我：</strong>一个正在学习把生活和想法写成文字的人。喜欢捣鼓一些小项目，也喜欢慢慢把事情做扎实。如果你恰好路过，欢迎去博客坐坐，或者直接给我写信打个招呼。
+    </div>
+
+    <footer>
+      lilucky.com · 用心搭建的小小角落
+    </footer>
+  </main>
+
+</body>
+</html>
