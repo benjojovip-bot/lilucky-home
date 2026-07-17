@@ -6,50 +6,51 @@
 <title>Ben · 一个爱写字的人</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600;700&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #FBEFE0;
-    --bg-soft: #FFF8EE;
-    --ink: #3A2A3D;
-    --ink-soft: #6B5B6E;
-    --gold: #E8A33D;
-    --coral: #E2665A;
-    --teal: #3E7C74;
-    --ring: rgba(232, 163, 61, 0.45);
+    --paper: #f2ece0;
+    --paper-soft: #f8f4ea;
+    --rule: rgba(58, 42, 52, 0.09);
+    --margin-red: rgba(178, 59, 46, 0.28);
+    --ink: #2b241f;
+    --ink-soft: #6b5f56;
+    --red: #b23b2e;
+    --red-soft: rgba(178, 59, 46, 0.14);
+    --ring: rgba(178, 59, 46, 0.35);
   }
 
   * { box-sizing: border-box; }
-
-  html, body {
-    margin: 0;
-    padding: 0;
-  }
+  html, body { margin: 0; padding: 0; }
 
   body {
-    background: var(--bg);
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        transparent 0px, transparent 37px,
+        var(--rule) 37px, var(--rule) 38px
+      ),
+      var(--paper);
     color: var(--ink);
     font-family: 'Figtree', sans-serif;
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 6vh 24px;
+    padding: 8vh 24px 10vh;
     overflow-x: hidden;
     position: relative;
   }
 
-  /* 背景纹理：极淡的暖色噪点感光晕，不抢主体 */
+  /* 左侧稿纸红边线，只在够宽的视口显示 */
   body::before {
     content: "";
     position: fixed;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 60% 40% at 15% 10%, rgba(226, 102, 90, 0.10), transparent 60%),
-      radial-gradient(ellipse 50% 40% at 90% 85%, rgba(62, 124, 116, 0.08), transparent 60%);
-    pointer-events: none;
+    top: 0; bottom: 0;
+    left: calc(50% - 300px);
+    width: 1px;
+    background: var(--margin-red);
     z-index: 0;
+  }
+  @media (max-width: 700px) {
+    body::before { display: none; }
   }
 
   .page {
@@ -57,77 +58,83 @@
     z-index: 1;
     width: 100%;
     max-width: 560px;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
   }
 
-  /* 抽象光斑：代替头像的签名元素 */
-  .orb-wrap {
-    width: 132px;
-    height: 132px;
-    margin-bottom: 36px;
-    position: relative;
+  /* 签名元素：一道毛笔运笔，代替色块头像 */
+  .brush-mark {
+    width: 120px;
+    height: 60px;
+    margin-bottom: 28px;
   }
-
-  .orb {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, var(--gold) 0%, var(--coral) 55%, #F0C36D 100%);
-    filter: saturate(1.05);
-    animation: morph 9s ease-in-out infinite, breathe 6s ease-in-out infinite;
-    box-shadow: 0 20px 60px -15px rgba(226, 102, 90, 0.55);
+  .brush-mark path {
+    stroke: var(--red);
+    stroke-width: 6;
+    stroke-linecap: round;
+    fill: none;
+    stroke-dasharray: 220;
+    stroke-dashoffset: 220;
+    animation: draw 1.1s 0.15s cubic-bezier(.4,0,.2,1) forwards;
   }
-
-  .orb-glow {
-    position: absolute;
-    inset: -18px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(232, 163, 61, 0.35), transparent 70%);
-    animation: breathe 6s ease-in-out infinite;
-    z-index: -1;
-  }
-
-  @keyframes morph {
-    0%, 100% { border-radius: 42% 58% 65% 35% / 45% 45% 55% 55%; }
-    25%      { border-radius: 62% 38% 45% 55% / 60% 35% 65% 40%; }
-    50%      { border-radius: 40% 60% 55% 45% / 35% 60% 40% 65%; }
-    75%      { border-radius: 55% 45% 35% 65% / 55% 40% 60% 45%; }
-  }
-
-  @keyframes breathe {
-    0%, 100% { transform: scale(1); }
-    50%      { transform: scale(1.06); }
+  @keyframes draw {
+    to { stroke-dashoffset: 0; }
   }
 
   .eyebrow {
     font-size: 13px;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--teal);
+    color: var(--ink-soft);
     font-weight: 600;
-    margin-bottom: 14px;
+    margin-bottom: 16px;
   }
 
   h1 {
     font-family: 'Fraunces', serif;
     font-weight: 600;
-    font-size: clamp(2.1rem, 5vw, 3rem);
-    line-height: 1.15;
-    margin: 0 0 18px;
+    font-size: clamp(2rem, 5vw, 2.9rem);
+    line-height: 1.5;
+    margin: 0 0 22px;
     color: var(--ink);
   }
 
-  h1 em {
-    font-style: italic;
-    font-weight: 500;
-    color: var(--coral);
+  .brush-word {
+    position: relative;
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: 1.4em;
+    font-weight: 400;
+    color: var(--red);
+    padding: 0 4px;
+    display: inline-block;
+  }
+
+  .brush-underline {
+    position: absolute;
+    left: -2px;
+    right: -2px;
+    bottom: -6px;
+    width: calc(100% + 4px);
+    height: 14px;
+    overflow: visible;
+  }
+  .brush-underline path {
+    stroke: var(--red);
+    stroke-width: 3.5;
+    stroke-linecap: round;
+    fill: none;
+    stroke-dasharray: 140;
+    stroke-dashoffset: 140;
+    animation: draw 0.7s 0.9s cubic-bezier(.4,0,.2,1) forwards;
   }
 
   .tagline {
-    font-size: 1.05rem;
-    line-height: 1.7;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 1rem;
+    line-height: 1.85;
     color: var(--ink-soft);
     max-width: 420px;
     margin: 0 0 40px;
@@ -138,7 +145,7 @@
     flex-wrap: wrap;
     gap: 14px;
     justify-content: center;
-    margin-bottom: 56px;
+    margin-bottom: 58px;
   }
 
   .btn {
@@ -148,7 +155,7 @@
     text-decoration: none;
     padding: 13px 26px;
     border-radius: 999px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -156,98 +163,254 @@
 
   .btn-primary {
     background: var(--ink);
-    color: var(--bg-soft);
-    box-shadow: 0 10px 30px -12px rgba(58, 42, 61, 0.5);
+    color: var(--paper-soft);
+    box-shadow: 0 10px 30px -12px rgba(43, 36, 31, 0.5);
   }
-
-  .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 14px 34px -12px rgba(58, 42, 61, 0.6);
-  }
+  .btn-primary:hover { transform: translateY(-2px) rotate(-0.5deg); box-shadow: 0 14px 34px -12px rgba(43, 36, 31, 0.6); }
 
   .btn-secondary {
     background: transparent;
     color: var(--ink);
-    border: 1.5px solid rgba(58, 42, 61, 0.25);
+    border: 1.5px dashed rgba(43, 36, 31, 0.35);
   }
+  .btn-secondary:hover { border-color: var(--red); color: var(--red); transform: translateY(-2px) rotate(0.5deg); }
 
-  .btn-secondary:hover {
-    border-color: var(--teal);
-    color: var(--teal);
-    transform: translateY(-2px);
-  }
+  .btn:focus-visible { outline: 3px solid var(--ring); outline-offset: 3px; }
 
-  .btn:focus-visible {
-    outline: 3px solid var(--ring);
-    outline-offset: 3px;
-  }
-
+  /* 便签式的关于我 */
   .bio {
-    background: var(--bg-soft);
-    border-radius: 20px;
-    padding: 28px 30px;
+    position: relative;
+    background: var(--paper-soft);
+    border-radius: 3px;
+    padding: 30px 30px 26px;
+    font-family: 'Noto Serif SC', serif;
     font-size: 0.95rem;
-    line-height: 1.75;
+    line-height: 1.9;
     color: var(--ink-soft);
-    box-shadow: 0 1px 0 rgba(58, 42, 61, 0.05) inset;
-    max-width: 460px;
+    max-width: 440px;
+    box-shadow:
+      0 1px 1px rgba(43, 36, 31, 0.04),
+      0 14px 30px -16px rgba(43, 36, 31, 0.35);
+    transform: rotate(-0.6deg);
+  }
+  .bio strong { color: var(--ink); }
+
+  .tape {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-2deg);
+    width: 92px;
+    height: 26px;
+    background: rgba(226, 102, 90, 0.22);
+    border: 1px solid rgba(226, 102, 90, 0.18);
   }
 
-  .bio strong {
+  .mini-cards {
+    display: flex;
+    justify-content: center;
+    margin-top: 44px;
+    perspective: 900px;
+  }
+
+  .mini-card {
+    --rot: 0deg;
+    --spread: 0px;
+    --lift: 0px;
+    --scale: 1;
+    --rx: 0deg;
+    --ry: 0deg;
+    width: 176px;
+    background: var(--paper-soft);
+    clip-path: path("M0,4 A4,4 0 0 1 4,0 L172,0 A4,4 0 0 1 176,4 L176,26 A6,6 0 0 0 176,38 L176,68 A4,4 0 0 1 172,72 L4,72 A4,4 0 0 1 0,68 L0,38 A6,6 0 0 0 0,26 Z");
+    padding: 14px 16px 14px 20px;
+    text-decoration: none;
     color: var(--ink);
+    box-shadow:
+      0 2px 5px -2px rgba(43, 36, 31, 0.16),
+      0 10px 26px -12px rgba(43, 36, 31, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-align: left;
+    position: relative;
+    transform-style: preserve-3d;
+    transform: translateX(var(--spread)) translateY(var(--lift)) scale(var(--scale))
+               rotate(var(--rot)) rotateX(var(--rx)) rotateY(var(--ry));
+    transition: transform 0.35s cubic-bezier(.2,.8,.3,1.2), box-shadow 0.35s ease;
+    animation: cardSettle 0.6s cubic-bezier(.2,.8,.3,1.2) backwards;
+  }
+  .mini-card::before {
+    content: "";
+    position: absolute;
+    left: 10px;
+    top: 6px;
+    bottom: 6px;
+    border-left: 1.5px dashed rgba(43, 36, 31, 0.22);
+  }
+  .mini-card .txt { margin-left: 4px; }
+
+  .mini-card:first-child { z-index: 1; --rot: -2deg; animation-delay: 0.05s; }
+  .mini-card:last-child  { margin-left: -6px; z-index: 0; --rot: 2deg; animation-delay: 0.15s; }
+
+  .mini-cards:hover .mini-card:first-child { --spread: -9px; --rot: -5deg; }
+  .mini-cards:hover .mini-card:last-child  { --spread: 9px;  --rot: 5deg; }
+
+  .mini-card:hover,
+  .mini-card:focus-visible {
+    --lift: -8px;
+    --scale: 1.1;
+    --rot: 0deg;
+    z-index: 3;
+    box-shadow:
+      0 8px 16px -6px rgba(43, 36, 31, 0.2),
+      0 26px 46px -14px rgba(43, 36, 31, 0.3);
+  }
+  .mini-card:focus-visible { outline: 3px solid var(--ring); outline-offset: 3px; }
+
+  @keyframes cardSettle {
+    from { transform: translateX(0) translateY(10px) scale(0.85) rotate(0deg); opacity: 0; }
+  }
+
+  .mini-card .icon { width: 24px; height: 24px; flex-shrink: 0; transform: translateZ(12px); }
+  .mini-card .t1 {
+    font-family: 'Figtree', sans-serif;
+    font-size: 11px;
+    color: var(--ink-soft);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .mini-card .t2 { font-family: 'Figtree', sans-serif; font-size: 13px; font-weight: 700; }
+  .status-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--red);
+    display: inline-block;
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 2px rgba(178, 59, 46, 0.2); }
+    50%      { box-shadow: 0 0 0 5px rgba(178, 59, 46, 0.05); }
   }
 
   footer {
-    margin-top: 48px;
+    margin-top: 52px;
     font-size: 0.8rem;
     color: var(--ink-soft);
-    opacity: 0.7;
+    opacity: 0.75;
+  }
+  .footer-rule {
+    width: 46px;
+    height: 10px;
+    margin: 0 auto 14px;
+  }
+  .footer-rule path {
+    stroke: var(--ink-soft);
+    stroke-width: 3;
+    stroke-linecap: round;
+    fill: none;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .orb, .orb-glow {
-      animation: none;
-    }
+    .brush-mark path, .brush-underline path { animation: none; stroke-dashoffset: 0; }
+    .mini-card { animation: none; transition: box-shadow 0.2s ease; }
+    .status-dot { animation: none; }
+    .mini-cards:hover .mini-card,
+    .mini-card:hover,
+    .mini-card:focus-visible { --spread: 0px; --lift: 0px; --scale: 1; --rx: 0deg; --ry: 0deg; }
   }
 
   @media (max-width: 480px) {
-    .bio { padding: 22px 20px; }
+    .bio { padding: 26px 22px 22px; }
   }
 </style>
 </head>
 <body>
 
   <main class="page">
-    <div class="orb-wrap">
-      <div class="orb-glow"></div>
-      <div class="orb"></div>
-    </div>
+    <svg class="brush-mark" viewBox="0 0 120 60" fill="none">
+      <path d="M8 40 C 30 10, 55 55, 78 22 C 92 4, 105 14, 112 28" />
+    </svg>
 
     <p class="eyebrow">Hi, 欢迎来到我的小角落</p>
 
-    <h1>我是 Ben，<br>喜欢把<em>想法</em>写下来</h1>
+    <h1>
+      我是 Ben，<br>
+      喜欢把
+      <span class="brush-word">
+        想法
+        <svg class="brush-underline" viewBox="0 0 100 14" preserveAspectRatio="none">
+          <path d="M2 8 C 20 3, 35 12, 52 7 C 68 2, 82 10, 97 6" />
+        </svg>
+      </span>
+      写下来
+    </h1>
 
     <p class="tagline">
       这里是我的个人主页。平时会在博客里记录一些思考、折腾过的东西。
     </p>
 
     <div class="links">
-      <a class="btn btn-primary" href="https://blog.lilucky.com">
-        读读我的博客 →
-      </a>
-      <a class="btn btn-secondary" href="mailto:contact@lilucky.com">
-        写信给我
-      </a>
+      <a class="btn btn-primary" href="https://blog.lilucky.com">读读我的博客 →</a>
+      <a class="btn btn-secondary" href="mailto:contact@lilucky.com">写信给我</a>
     </div>
 
     <div class="bio">
+      <div class="tape"></div>
       <strong>关于我：</strong>一个正在学习把生活和想法写成文字的人。喜欢捣鼓一些小项目，也喜欢慢慢把事情做扎实。如果你恰好路过，欢迎去博客坐坐，或者直接给我写信打个招呼。
     </div>
 
+    <div class="mini-cards">
+      <a class="mini-card" href="https://komari.600096.xyz/" target="_blank" rel="noopener">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 15l4-5 4 3 5-7 3 3" stroke="#b23b2e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="20" cy="9" r="2" fill="#b23b2e"/>
+        </svg>
+        <span class="txt">
+          <span class="t1"><span class="status-dot"></span>站点监控</span>
+          <span class="t2">探针面板</span>
+        </span>
+      </a>
+      <a class="mini-card" href="https://t.me/bbmaabot" target="_blank" rel="noopener">
+        <svg class="icon" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="120" cy="120" r="120" fill="#37aee2"/>
+          <path d="M180 72l-19 92c-1.4 6.4-5.2 8-10.6 5l-29-21.4-14 13.5c-1.6 1.6-2.9 2.9-6 2.9l2.1-30.2 55-49.7c2.4-2.1-.5-3.3-3.7-1.2l-68 42.8-29.3-9.2c-6.4-2-6.5-6.4 1.3-9.5l114.6-44.2c5.3-2 10 1.3 8.6 8.8z" fill="#fff"/>
+        </svg>
+        <span class="txt">
+          <span class="t1">即时联系</span>
+          <span class="t2">@bbmaabot</span>
+        </span>
+      </a>
+    </div>
+
     <footer>
+      <svg class="footer-rule" viewBox="0 0 46 10" fill="none">
+        <path d="M2 5 C 12 0, 20 10, 30 5 C 36 2, 40 6, 44 4" />
+      </svg>
       lilucky.com · 用心搭建的小小角落
     </footer>
   </main>
+
+  <script>
+    (function () {
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduce) return;
+      document.querySelectorAll('.mini-card').forEach(function (card) {
+        card.addEventListener('mousemove', function (e) {
+          var r = card.getBoundingClientRect();
+          var px = (e.clientX - r.left) / r.width;
+          var py = (e.clientY - r.top) / r.height;
+          var maxTilt = 10;
+          card.style.setProperty('--ry', ((px - 0.5) * maxTilt * 2).toFixed(2) + 'deg');
+          card.style.setProperty('--rx', ((0.5 - py) * maxTilt * 2).toFixed(2) + 'deg');
+        });
+        card.addEventListener('mouseleave', function () {
+          card.style.setProperty('--ry', '0deg');
+          card.style.setProperty('--rx', '0deg');
+        });
+      });
+    })();
+  </script>
 
 </body>
 </html>
