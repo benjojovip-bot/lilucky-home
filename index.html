@@ -801,57 +801,105 @@
       var assistantPanel = document.getElementById('ai-guide');
       var assistantPin = document.getElementById('assistantPin');
 
-      var knowledge = [
-        {
-          keywords: ['小红书', 'xhs', '赞', '收藏', '主页', '内容账号', '账号'],
-          reply: '你可以先看 Ben 的小红书主页。这个账号主要围绕中国传统文化美学展开，累计获得 59.6K 次赞与收藏，适合了解他的选题、审美表达和内容传播能力。',
-          links: [
-            ['小红书主页', 'https://xhslink.com/m/2tRGYHOEFiO'],
-            ['东方审美研究', '#work']
-          ]
-        },
-        {
-          keywords: ['ai', 'AI', '机器人', '应用', 'agent', 'rag', 'prompt', '工作流', '自动化'],
-          reply: '如果你关心 AI 应用，可以先看博客里的 AI 通识课记录，再看首页的作品档案。后续这里会增加 Agent、RAG、提示词和自动化工作流案例。',
-          links: [
-            ['AI 通识课记录', 'https://blog.lilucky.com/blog/%E6%8E%A8%E8%8D%90ai%E9%80%9A%E8%AF%86%E8%AF%BE/'],
-            ['作品档案', '#work']
-          ]
-        },
-        {
-          keywords: ['服务器', '部署', '监控', 'cloudflare', 'vps', '探针', '运维', '搭建'],
-          reply: '服务器方向建议从探针面板看起。它能说明这个网站不是只停在页面设计上，也有部署、监控和维护能力。',
-          links: [
-            ['探针面板', 'https://komari.600096.xyz/'],
-            ['博客', 'https://blog.lilucky.com']
-          ]
-        },
-        {
-          keywords: ['品牌', '设计', '视觉', 'logo', '字体', '色彩', '识别'],
-          reply: '品牌设计会逐步整理成案例：定位、文字、色彩、字体、版式和应用场景。现在可以先看首页的能力矩阵和联系我交流具体项目。',
-          links: [
-            ['能力矩阵', '#capabilities'],
-            ['联系 Ben', '#contact']
-          ]
-        },
-        {
-          keywords: ['传统', '文化', '中国', '东方', '新中式', '节气', '器物', '审美', '美学'],
-          reply: '传统文化美学是这里最重要的内容母题之一。你可以先看小红书主页，再看首页作品档案里关于东方审美研究的说明。',
-          links: [
-            ['小红书主页', 'https://xhslink.com/m/2tRGYHOEFiO'],
-            ['东方审美研究', '#work'],
-            ['联系交流', '#contact']
-          ]
-        },
-        {
-          keywords: ['博客', '文章', '写作', '内容', '记录'],
-          reply: '博客是主要的长文入口，会记录 AI、服务器、设计和中文审美实践。你可以先从最新文章开始看。',
-          links: [
-            ['打开博客', 'https://blog.lilucky.com'],
-            ['全部文章', 'https://blog.lilucky.com/blog']
-          ]
+      var siteIndex = {
+        items: [
+          {
+            title: '能力矩阵',
+            summary: '内容写作、品牌设计、传统文化表达、AI 与服务器四条能力线。',
+            url: '#capabilities',
+            keywords: ['能力', '品牌', '传统文化', 'AI', '服务器']
+          },
+          {
+            title: '作品档案',
+            summary: '博客系统、站点监控、AI 应用记录、东方审美研究和小红书主页。',
+            url: '#work',
+            keywords: ['作品', '案例', '小红书', '监控', '博客']
+          },
+          {
+            title: '联系 Ben',
+            summary: '通过邮件或 Telegram 联系 Ben。',
+            url: '#contact',
+            keywords: ['联系', '邮箱', 'telegram', 'tg']
+          }
+        ]
+      };
+
+      function normalizeText(value) {
+        return String(value || '').toLowerCase().replace(/\s+/g, ' ').trim();
+      }
+
+      function getQueryTerms(query) {
+        var normalized = normalizeText(query);
+        var terms = normalized.split(/[\s,，.。/]+/).filter(Boolean);
+        if (normalized && terms.indexOf(normalized) === -1) terms.push(normalized);
+        return terms;
+      }
+
+      function scoreItem(item, query) {
+        var normalizedQuery = normalizeText(query);
+        var terms = getQueryTerms(query);
+        var title = normalizeText(item.title);
+        var summary = normalizeText(item.summary);
+        var type = normalizeText(item.type);
+        var keywords = (item.keywords || []).map(normalizeText);
+        var haystack = [title, summary, type, keywords.join(' ')].join(' ');
+        var score = 0;
+
+        if (normalizedQuery && haystack.indexOf(normalizedQuery) !== -1) score += 18;
+
+        terms.forEach(function (term) {
+          if (!term) return;
+          if (title.indexOf(term) !== -1) score += 10;
+          if (keywords.some(function (keyword) { return keyword.indexOf(term) !== -1 || term.indexOf(keyword) !== -1; })) score += 8;
+          if (summary.indexOf(term) !== -1) score += 4;
+          if (type.indexOf(term) !== -1) score += 2;
+        });
+
+        return score;
+      }
+
+      function searchIndex(query) {
+        return siteIndex.items
+          .map(function (item) {
+            return { item: item, score: scoreItem(item, query) };
+          })
+          .filter(function (result) {
+            return result.score > 0;
+          })
+          .sort(function (a, b) {
+            return b.score - a.score;
+          })
+          .map(function (result) {
+            return result.item;
+          });
+      }
+
+      function formatGuideReply(results) {
+        if (!results.length) {
+          return '我没有找到完全匹配的内容。你可以从能力矩阵、作品档案或联系方式开始浏览，也可以换一个关键词继续问我。';
         }
-      ];
+
+        return '我在站内索引里找到了这些入口：' + results
+          .slice(0, 3)
+          .map(function (item) { return item.title; })
+          .join('、') + '。这些结果来自本地索引，不会调用外部 AI，也不会消耗 token。';
+      }
+
+      function loadSiteIndex() {
+        return fetch("site-index.json")
+          .then(function (response) {
+            if (!response.ok) throw new Error('site index request failed');
+            return response.json();
+          })
+          .then(function (data) {
+            if (data && Array.isArray(data.items) && data.items.length) {
+              siteIndex = data;
+            }
+          })
+          .catch(function () {
+            appendMessage('站内索引暂时没有加载成功，我会先使用内置的基础导览，不会调用外部 AI。', 'bot');
+          });
+      }
 
       function appendMessage(text, type, links) {
         var item = document.createElement('div');
@@ -884,23 +932,15 @@
 
         appendMessage(normalized, 'user');
 
-        var hit = knowledge.find(function (entry) {
-          return entry.keywords.some(function (keyword) {
-            return normalized.toLowerCase().indexOf(keyword.toLowerCase()) !== -1;
-          });
-        });
+        var results = searchIndex(normalized).slice(0, 3);
+        var links = results.length
+          ? results.map(function (item) { return [item.title, item.url]; })
+          : [['能力矩阵', '#capabilities'], ['作品档案', '#work'], ['联系 Ben', '#contact']];
 
-        if (!hit) {
-          appendMessage(
-            '我先把你带到总览：这里按内容写作、品牌设计、传统文化、AI 与服务器四条线组织。你也可以换个关键词继续问我。',
-            'bot',
-            [['能力矩阵', '#capabilities'], ['作品档案', '#work'], ['联系 Ben', '#contact']]
-          );
-          return;
-        }
-
-        appendMessage(hit.reply, 'bot', hit.links);
+        appendMessage(formatGuideReply(results), 'bot', links);
       }
+
+      loadSiteIndex();
 
       quickButtons.forEach(function (button) {
         button.addEventListener('click', function () {

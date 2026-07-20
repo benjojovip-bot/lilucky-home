@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "mode": "local-zero-token",
+  "updated": "2026-07-20",
+  "description": "LiLucky homepage local guide index. This file powers the homepage assistant without external AI calls, API keys, or token usage.",
+  "items": [
+    {
+      "id": "xiaohongshu-culture",
+      "type": "social-proof",
+      "title": "小红书中国传统文化美学主页",
+      "summary": "Ben 的小红书主页主要围绕中国传统文化美学展开，累计获得 59.6K 次赞与收藏，适合了解选题、文案、审美表达和内容传播能力。",
+      "url": "https://xhslink.com/m/2tRGYHOEFiO",
+      "keywords": ["小红书", "xhs", "赞", "收藏", "传统文化", "中国传统文化", "美学", "审美", "内容账号", "主页"]
+    },
+    {
+      "id": "blog-home",
+      "type": "blog",
+      "title": "LiLucky / Ben Blog",
+      "summary": "Ben 的个人博客，记录 AI 应用、服务器搭建、品牌设计和中文传统文化审美实践。",
+      "url": "https://blog.lilucky.com",
+      "keywords": ["博客", "文章", "写作", "记录", "AI", "服务器", "品牌设计", "传统文化", "审美"]
+    },
+    {
+      "id": "ai-intro-post",
+      "type": "blog-post",
+      "title": "推荐阅读：AI 通识课",
+      "summary": "一篇关于 AI 通识课的推荐记录，覆盖神经网络、Transformer、RAG、Agent、Function Calling 和动手做 AI 应用。",
+      "url": "https://blog.lilucky.com/blog/%E6%8E%A8%E8%8D%90ai%E9%80%9A%E8%AF%86%E8%AF%BE/",
+      "keywords": ["AI", "通识课", "RAG", "Agent", "Transformer", "应用", "学习资源", "提示词", "自动化"]
+    },
+    {
+      "id": "server-monitor",
+      "type": "system",
+      "title": "站点监控 / 探针面板",
+      "summary": "服务器状态监控入口，用来展示部署、运维、监控和长期维护能力。",
+      "url": "https://komari.600096.xyz/",
+      "keywords": ["服务器", "监控", "服务器监控", "站点监控", "探针", "探针面板", "运维", "部署", "VPS", "Cloudflare", "状态", "系统"]
+    },
+    {
+      "id": "capability-matrix",
+      "type": "section",
+      "title": "能力矩阵",
+      "summary": "首页能力区，说明内容写作、品牌设计、传统文化表达、AI 与服务器四条能力线。",
+      "url": "#capabilities",
+      "keywords": ["能力", "矩阵", "内容写作", "品牌设计", "传统文化", "AI", "服务器", "方向"]
+    },
+    {
+      "id": "selected-work",
+      "type": "section",
+      "title": "作品档案",
+      "summary": "精选证据区，集中放博客系统、站点监控、AI 应用记录、东方审美研究和小红书主页。",
+      "url": "#work",
+      "keywords": ["作品", "案例", "项目", "证据", "档案", "小红书", "AI", "监控", "博客"]
+    },
+    {
+      "id": "brand-design",
+      "type": "capability",
+      "title": "品牌设计",
+      "summary": "从定位、文字、色彩、字体到视觉秩序，让项目有可识别的样子。",
+      "url": "#capabilities",
+      "keywords": ["品牌", "品牌设计", "视觉", "logo", "字体", "色彩", "识别", "版式", "定位"]
+    },
+    {
+      "id": "culture-method",
+      "type": "capability",
+      "title": "中国传统文化美学表达",
+      "summary": "研究传统色、器物、空间秩序和节气美学，把传统文化转译成现代内容和品牌视觉。",
+      "url": "#work",
+      "keywords": ["传统", "文化", "中国", "东方", "新中式", "节气", "器物", "空间", "审美", "美学"]
+    },
+    {
+      "id": "contact-email",
+      "type": "contact",
+      "title": "邮件联系 Ben",
+      "summary": "适合交流个人品牌、小型数字产品、AI 工作流、中文文化视觉项目、博客搭建和服务器监控。",
+      "url": "mailto:contact@lilucky.com",
+      "keywords": ["联系", "邮箱", "邮件", "合作", "项目", "咨询", "contact", "Ben"]
+    },
+    {
+      "id": "contact-telegram",
+      "type": "contact",
+      "title": "Telegram 联系 Ben",
+      "summary": "通过 Telegram 即时联系 Ben，适合快速沟通网站、AI 导览、服务器、Bot 和自动化工具。",
+      "url": "https://t.me/bbmaabot",
+      "keywords": ["telegram", "tg", "联系", "即时联系", "bot", "机器人", "自动化", "Ben"]
+    }
+  ]
+}
