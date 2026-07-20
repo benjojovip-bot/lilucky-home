@@ -3,28 +3,42 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ben · 一个爱写字的人</title>
+<title>LiLucky / Ben · 中文审美、AI 应用与服务器搭建</title>
+<meta name="description" content="Ben / LiLucky 的个人品牌首页，展示博客写作、品牌设计、中国传统文化美学、服务器搭建和 AI 应用实践。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="LiLucky / Ben">
+<meta property="og:description" content="用中文审美、品牌设计和 AI 工具，把想法做成可以运行、可以传播、可以长期维护的作品。">
+<meta property="og:url" content="https://www.lilucky.com/">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600;700&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,650;1,9..144,500&family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600;700&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
     --paper: #f2ece0;
     --paper-soft: #f8f4ea;
-    --rule: rgba(58, 42, 52, 0.09);
-    --margin-red: rgba(178, 59, 46, 0.28);
+    --paper-deep: #e8dcc9;
     --ink: #2b241f;
     --ink-soft: #6b5f56;
-    --red: #b23b2e;
-    --red-soft: rgba(178, 59, 46, 0.14);
-    --ring: rgba(178, 59, 46, 0.35);
+    --ink-faint: rgba(43, 36, 31, 0.56);
+    --rule: rgba(58, 42, 52, 0.11);
+    --red: #a73a2f;
+    --red-soft: rgba(167, 58, 47, 0.13);
+    --jade: #526c5b;
+    --gold: #9a7a3d;
+    --ring: rgba(167, 58, 47, 0.36);
+    --shadow: rgba(70, 48, 32, 0.18);
   }
 
   * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   html, body { margin: 0; padding: 0; }
 
   body {
+    min-height: 100vh;
     background:
+      radial-gradient(circle at 18% 6%, rgba(167, 58, 47, 0.08), transparent 32rem),
+      radial-gradient(circle at 82% 18%, rgba(82, 108, 91, 0.11), transparent 28rem),
       repeating-linear-gradient(
         to bottom,
         transparent 0px, transparent 37px,
@@ -32,385 +46,883 @@
       ),
       var(--paper);
     color: var(--ink);
-    font-family: 'Figtree', sans-serif;
-    min-height: 100vh;
-    padding: 8vh 24px 10vh;
+    font-family: 'Figtree', 'Noto Serif SC', sans-serif;
     overflow-x: hidden;
-    position: relative;
   }
 
-  /* 左侧稿纸红边线，只在够宽的视口显示 */
   body::before {
     content: "";
     position: fixed;
-    top: 0; bottom: 0;
-    left: calc(50% - 300px);
-    width: 1px;
-    background: var(--margin-red);
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(43, 36, 31, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(43, 36, 31, 0.018) 1px, transparent 1px);
+    background-size: 112px 112px;
+    mask-image: linear-gradient(to bottom, black, transparent 74%);
     z-index: 0;
   }
-  @media (max-width: 700px) {
-    body::before { display: none; }
+
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--red); }
+  button, input { font: inherit; }
+  button { cursor: pointer; }
+
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -4rem;
+    z-index: 20;
+    background: var(--ink);
+    color: var(--paper-soft);
+    padding: 0.7rem 0.9rem;
+    border-radius: 4px;
   }
+  .skip-link:focus { top: 1rem; }
 
   .page {
     position: relative;
     z-index: 1;
-    width: 100%;
-    max-width: 560px;
+    width: min(1180px, calc(100% - 40px));
     margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
   }
 
-  /* 签名元素：一道毛笔运笔，代替色块头像 */
-  .brush-mark {
-    width: 120px;
-    height: 60px;
-    margin-bottom: 28px;
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 28px 0;
   }
-  .brush-mark path {
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-family: 'Fraunces', 'Noto Serif SC', serif;
+    font-weight: 650;
+    font-size: 1.2rem;
+  }
+
+  .brand-mark {
+    width: 42px;
+    height: 24px;
+  }
+  .brand-mark path {
     stroke: var(--red);
-    stroke-width: 6;
+    stroke-width: 5;
     stroke-linecap: round;
     fill: none;
-    stroke-dasharray: 220;
-    stroke-dashoffset: 220;
-    animation: draw 1.1s 0.15s cubic-bezier(.4,0,.2,1) forwards;
+    stroke-dasharray: 120;
+    stroke-dashoffset: 120;
+    animation: draw 1s 0.1s cubic-bezier(.4,0,.2,1) forwards;
   }
-  @keyframes draw {
-    to { stroke-dashoffset: 0; }
+
+  .nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.4rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+  }
+
+  .nav a {
+    padding: 0.45rem 0.65rem;
+    border-radius: 4px;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .nav a:hover { background: var(--red-soft); text-decoration: none; }
+
+  .hero {
+    min-height: calc(100dvh - 96px);
+    display: grid;
+    grid-template-columns: minmax(0, 1.04fr) minmax(340px, 0.78fr);
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: center;
+    padding: 24px 0 72px;
   }
 
   .eyebrow {
-    font-size: 13px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin: 0 0 1.2rem;
     color: var(--ink-soft);
-    font-weight: 600;
-    margin-bottom: 16px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.76rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 28px;
+    height: 1px;
+    background: var(--red);
   }
 
+  h1, h2, h3, p { margin-top: 0; }
   h1 {
-    font-family: 'Fraunces', serif;
-    font-weight: 600;
-    font-size: clamp(2rem, 5vw, 2.9rem);
-    line-height: 1.5;
-    margin: 0 0 22px;
-    color: var(--ink);
+    max-width: 12ch;
+    margin-bottom: 1.4rem;
+    font-family: 'Fraunces', 'Noto Serif SC', serif;
+    font-size: clamp(3rem, 8vw, 6.8rem);
+    line-height: 0.96;
+    font-weight: 650;
+    text-wrap: balance;
+  }
+  h2 {
+    margin-bottom: 1.1rem;
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(1.8rem, 3.2vw, 3rem);
+    line-height: 1.16;
+    text-wrap: balance;
+  }
+  h3 {
+    margin-bottom: 0.75rem;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 1.18rem;
+  }
+
+  .lead {
+    max-width: 58ch;
+    margin-bottom: 2rem;
+    color: var(--ink-soft);
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(1rem, 1.8vw, 1.18rem);
+    line-height: 1.9;
   }
 
   .brush-word {
     position: relative;
-    font-family: 'Ma Shan Zheng', cursive;
-    font-size: 1.4em;
-    font-weight: 400;
-    color: var(--red);
-    padding: 0 4px;
     display: inline-block;
-  }
-
-  .brush-underline {
-    position: absolute;
-    left: -2px;
-    right: -2px;
-    bottom: -6px;
-    width: calc(100% + 4px);
-    height: 14px;
-    overflow: visible;
-  }
-  .brush-underline path {
-    stroke: var(--red);
-    stroke-width: 3.5;
-    stroke-linecap: round;
-    fill: none;
-    stroke-dasharray: 140;
-    stroke-dashoffset: 140;
-    animation: draw 0.7s 0.9s cubic-bezier(.4,0,.2,1) forwards;
-  }
-
-  .tagline {
-    font-family: 'Noto Serif SC', serif;
-    font-size: 1rem;
-    line-height: 1.85;
-    color: var(--ink-soft);
-    max-width: 420px;
-    margin: 0 0 40px;
-  }
-
-  .links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 14px;
-    justify-content: center;
-    margin-bottom: 58px;
+    color: var(--red);
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: 1.08em;
+    font-weight: 400;
   }
 
   .btn {
-    font-family: 'Figtree', sans-serif;
-    font-weight: 600;
-    font-size: 0.95rem;
-    text-decoration: none;
-    padding: 13px 26px;
-    border-radius: 999px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 46px;
+    padding: 0.78rem 1rem;
+    border: 1px solid rgba(43, 36, 31, 0.18);
+    border-radius: 5px;
+    font-weight: 700;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
   }
-
   .btn-primary {
     background: var(--ink);
     color: var(--paper-soft);
-    box-shadow: 0 10px 30px -12px rgba(43, 36, 31, 0.5);
+    box-shadow: 0 16px 32px -20px rgba(43, 36, 31, 0.75);
   }
-  .btn-primary:hover { transform: translateY(-2px) rotate(-0.5deg); box-shadow: 0 14px 34px -12px rgba(43, 36, 31, 0.6); }
+  .btn-secondary { background: rgba(248, 244, 234, 0.62); }
+  .btn:hover { transform: translateY(-2px); text-decoration: none; }
+  .btn-primary:hover { color: var(--paper-soft); }
+  .btn:active { transform: translateY(0) scale(0.98); }
 
-  .btn-secondary {
-    background: transparent;
-    color: var(--ink);
-    border: 1.5px dashed rgba(43, 36, 31, 0.35);
-  }
-  .btn-secondary:hover { border-color: var(--red); color: var(--red); transform: translateY(-2px) rotate(0.5deg); }
-
-  .btn:focus-visible { outline: 3px solid var(--ring); outline-offset: 3px; }
-
-  /* 便签式的关于我 */
-  .bio {
+  .assistant-panel {
     position: relative;
-    background: var(--paper-soft);
-    border-radius: 3px;
-    padding: 30px 30px 26px;
-    font-family: 'Noto Serif SC', serif;
-    font-size: 0.95rem;
-    line-height: 1.9;
-    color: var(--ink-soft);
-    max-width: 440px;
+    border: 1px solid rgba(43, 36, 31, 0.16);
+    border-radius: 6px;
+    background:
+      linear-gradient(145deg, rgba(248, 244, 234, 0.9), rgba(232, 220, 201, 0.72));
     box-shadow:
-      0 1px 1px rgba(43, 36, 31, 0.04),
-      0 14px 30px -16px rgba(43, 36, 31, 0.35);
-    transform: rotate(-0.6deg);
-  }
-  .bio strong { color: var(--ink); }
-
-  .tape {
-    position: absolute;
-    top: -14px;
-    left: 50%;
-    transform: translateX(-50%) rotate(-2deg);
-    width: 92px;
-    height: 26px;
-    background: rgba(226, 102, 90, 0.22);
-    border: 1px solid rgba(226, 102, 90, 0.18);
+      0 2px 0 rgba(255, 255, 255, 0.42) inset,
+      0 28px 70px -46px var(--shadow);
+    overflow: hidden;
+    transform: translate3d(0, 0, 0);
+    animation: assistantFloat 11s ease-in-out infinite;
+    transition: transform 0.32s cubic-bezier(.2,.8,.2,1), box-shadow 0.32s ease, border-color 0.32s ease;
+    will-change: transform;
   }
 
-  .mini-cards {
-    display: flex;
-    justify-content: center;
-    margin-top: 44px;
-    perspective: 900px;
-  }
-
-  .mini-card {
-    --rot: 0deg;
-    --spread: 0px;
-    --lift: 0px;
-    --scale: 1;
-    --rx: 0deg;
-    --ry: 0deg;
-    width: 176px;
-    background: var(--paper-soft);
-    clip-path: path("M0,4 A4,4 0 0 1 4,0 L172,0 A4,4 0 0 1 176,4 L176,26 A6,6 0 0 0 176,38 L176,68 A4,4 0 0 1 172,72 L4,72 A4,4 0 0 1 0,68 L0,38 A6,6 0 0 0 0,26 Z");
-    padding: 14px 16px 14px 20px;
-    text-decoration: none;
-    color: var(--ink);
+  .assistant-panel:hover,
+  .assistant-panel:focus-within,
+  .assistant-panel.is-pinned {
+    animation-play-state: paused;
+    transform: translate3d(0, -12px, 0);
+    border-color: rgba(167, 58, 47, 0.28);
     box-shadow:
-      0 2px 5px -2px rgba(43, 36, 31, 0.16),
-      0 10px 26px -12px rgba(43, 36, 31, 0.2);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    text-align: left;
-    position: relative;
-    transform-style: preserve-3d;
-    transform: translateX(var(--spread)) translateY(var(--lift)) scale(var(--scale))
-               rotate(var(--rot)) rotateX(var(--rx)) rotateY(var(--ry));
-    transition: transform 0.35s cubic-bezier(.2,.8,.3,1.2), box-shadow 0.35s ease;
-    animation: cardSettle 0.6s cubic-bezier(.2,.8,.3,1.2) backwards;
+      0 2px 0 rgba(255, 255, 255, 0.5) inset,
+      0 34px 88px -42px rgba(70, 48, 32, 0.44);
   }
-  .mini-card::before {
+
+  .assistant-panel.is-pinned {
+    animation: none;
+  }
+
+  .assistant-panel::before {
     content: "";
     position: absolute;
-    left: 10px;
-    top: 6px;
-    bottom: 6px;
-    border-left: 1.5px dashed rgba(43, 36, 31, 0.22);
-  }
-  .mini-card .txt { margin-left: 4px; }
-
-  .mini-card:first-child { z-index: 1; --rot: -2deg; animation-delay: 0.05s; }
-  .mini-card:last-child  { margin-left: -6px; z-index: 0; --rot: 2deg; animation-delay: 0.15s; }
-
-  .mini-cards:hover .mini-card:first-child { --spread: -9px; --rot: -5deg; }
-  .mini-cards:hover .mini-card:last-child  { --spread: 9px;  --rot: 5deg; }
-
-  .mini-card:hover,
-  .mini-card:focus-visible {
-    --lift: -8px;
-    --scale: 1.1;
-    --rot: 0deg;
-    z-index: 3;
-    box-shadow:
-      0 8px 16px -6px rgba(43, 36, 31, 0.2),
-      0 26px 46px -14px rgba(43, 36, 31, 0.3);
-  }
-  .mini-card:focus-visible { outline: 3px solid var(--ring); outline-offset: 3px; }
-
-  @keyframes cardSettle {
-    from { transform: translateX(0) translateY(10px) scale(0.85) rotate(0deg); opacity: 0; }
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(90deg, transparent 0, transparent 52px, rgba(167, 58, 47, 0.18) 53px, transparent 54px),
+      repeating-linear-gradient(to bottom, transparent 0 35px, rgba(43, 36, 31, 0.06) 36px);
   }
 
-  .mini-card .icon { width: 24px; height: 24px; flex-shrink: 0; transform: translateZ(12px); }
-  .mini-card .t1 {
-    font-family: 'Figtree', sans-serif;
-    font-size: 11px;
-    color: var(--ink-soft);
+  .assistant-head,
+  .assistant-body,
+  .assistant-form {
+    position: relative;
+    z-index: 1;
+  }
+
+  .assistant-head {
     display: flex;
     align-items: center;
-    gap: 5px;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.1rem;
+    border-bottom: 1px solid var(--rule);
   }
-  .mini-card .t2 { font-family: 'Figtree', sans-serif; font-size: 13px; font-weight: 700; }
-  .status-dot {
-    width: 6px; height: 6px; border-radius: 50%;
+  .assistant-title {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-weight: 700;
+  }
+  .assistant-orb {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
     background: var(--red);
-    display: inline-block;
-    animation: pulse 2.4s ease-in-out infinite;
+    box-shadow: 0 0 0 5px var(--red-soft);
   }
-  @keyframes pulse {
-    0%, 100% { box-shadow: 0 0 0 2px rgba(178, 59, 46, 0.2); }
-    50%      { box-shadow: 0 0 0 5px rgba(178, 59, 46, 0.05); }
+  .assistant-status {
+    color: var(--jade);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.74rem;
   }
 
-  footer {
-    margin-top: 52px;
-    font-size: 0.8rem;
+  .assistant-tools {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+  }
+
+  .assistant-pin {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.34rem;
+    border: 1px solid rgba(43, 36, 31, 0.16);
+    border-radius: 4px;
+    background: rgba(248, 244, 234, 0.64);
     color: var(--ink-soft);
-    opacity: 0.75;
+    padding: 0.34rem 0.48rem;
+    opacity: 0.42;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    transition: opacity 0.2s ease, background 0.2s ease, color 0.2s ease, transform 0.2s ease;
   }
-  .footer-rule {
-    width: 46px;
-    height: 10px;
-    margin: 0 auto 14px;
+
+  .assistant-pin svg {
+    width: 0.82rem;
+    height: 0.82rem;
   }
-  .footer-rule path {
-    stroke: var(--ink-soft);
-    stroke-width: 3;
-    stroke-linecap: round;
-    fill: none;
+
+  .assistant-panel:hover .assistant-pin,
+  .assistant-panel:focus-within .assistant-pin,
+  .assistant-panel.is-pinned .assistant-pin {
+    opacity: 1;
+  }
+
+  .assistant-pin:hover,
+  .assistant-pin[aria-pressed="true"] {
+    background: var(--red-soft);
+    color: var(--red);
+    transform: translateY(-1px);
+  }
+
+  .assistant-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    min-height: 410px;
+    max-height: 410px;
+    padding: 1.05rem;
+    overflow-y: auto;
+  }
+  .message {
+    width: min(92%, 28rem);
+    padding: 0.85rem 0.95rem;
+    border-radius: 5px;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 0.94rem;
+    line-height: 1.72;
+    box-shadow: 0 12px 24px -22px rgba(43, 36, 31, 0.55);
+  }
+  .message.bot {
+    align-self: flex-start;
+    background: rgba(248, 244, 234, 0.88);
+    border: 1px solid rgba(43, 36, 31, 0.12);
+  }
+  .message.user {
+    align-self: flex-end;
+    background: var(--ink);
+    color: var(--paper-soft);
+    font-family: 'Figtree', sans-serif;
+  }
+  .message-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-top: 0.7rem;
+  }
+  .message-links a {
+    display: inline-flex;
+    padding: 0.34rem 0.5rem;
+    border: 1px solid rgba(167, 58, 47, 0.22);
+    border-radius: 4px;
+    color: var(--red);
+    font-family: 'Figtree', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  .quick-prompts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+    margin-top: auto;
+  }
+  .quick-prompts button {
+    border: 1px dashed rgba(43, 36, 31, 0.22);
+    border-radius: 4px;
+    background: rgba(248, 244, 234, 0.62);
+    color: var(--ink);
+    padding: 0.56rem 0.6rem;
+    text-align: left;
+    transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+  }
+  .quick-prompts button:hover {
+    border-color: rgba(167, 58, 47, 0.42);
+    background: var(--red-soft);
+    transform: translateY(-1px);
+  }
+
+  .assistant-form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.5rem;
+    padding: 0.8rem;
+    border-top: 1px solid var(--rule);
+    background: rgba(232, 220, 201, 0.52);
+  }
+  .assistant-form input {
+    min-width: 0;
+    border: 1px solid rgba(43, 36, 31, 0.18);
+    border-radius: 4px;
+    background: var(--paper-soft);
+    color: var(--ink);
+    padding: 0.78rem 0.85rem;
+    outline: none;
+  }
+  .assistant-form input:focus {
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px var(--ring);
+  }
+  .assistant-form button {
+    border: 0;
+    border-radius: 4px;
+    background: var(--red);
+    color: var(--paper-soft);
+    padding: 0.78rem 0.9rem;
+    font-weight: 700;
+  }
+
+  .section {
+    padding: 86px 0;
+    border-top: 1px solid var(--rule);
+  }
+  .section-grid {
+    display: grid;
+    grid-template-columns: 0.42fr 1fr;
+    gap: clamp(2rem, 5vw, 5rem);
+  }
+  .section-kicker {
+    position: sticky;
+    top: 1.5rem;
+    align-self: start;
+    color: var(--ink-soft);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.76rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .capability-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    border: 1px solid var(--rule);
+    background: var(--rule);
+  }
+  .capability {
+    min-height: 220px;
+    padding: 1.35rem;
+    background: rgba(248, 244, 234, 0.64);
+  }
+  .capability .num,
+  .work-card .num {
+    display: block;
+    margin-bottom: 2.2rem;
+    color: var(--red);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+  }
+  .capability p,
+  .work-card p,
+  .method p,
+  .contact-card p {
+    color: var(--ink-soft);
+    font-family: 'Noto Serif SC', serif;
+    line-height: 1.82;
+  }
+
+  .work-list {
+    display: grid;
+    gap: 1rem;
+  }
+  .work-card {
+    display: grid;
+    grid-template-columns: 0.2fr 1fr auto;
+    gap: 1.4rem;
+    align-items: start;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .work-card .num { margin-bottom: 0; }
+  .work-card a {
+    color: var(--red);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .method {
+    max-width: 760px;
+    padding: 2rem;
+    border-left: 3px solid var(--red);
+    background: rgba(248, 244, 234, 0.54);
+  }
+
+  .contact-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1.5rem;
+    align-items: end;
+    padding: 2rem;
+    border: 1px solid var(--rule);
+    background: rgba(248, 244, 234, 0.64);
+  }
+
+  .contact-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.75rem;
+  }
+
+  .btn svg {
+    width: 1.05rem;
+    height: 1.05rem;
+    flex: 0 0 auto;
+  }
+
+  .site-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 36px 0 58px;
+    color: var(--ink-soft);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--ring);
+    outline-offset: 3px;
+  }
+
+  @keyframes draw {
+    to { stroke-dashoffset: 0; }
+  }
+
+  @keyframes assistantFloat {
+    0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+    25% { transform: translate3d(8px, -9px, 0) rotate(0.25deg); }
+    50% { transform: translate3d(-6px, -2px, 0) rotate(-0.2deg); }
+    75% { transform: translate3d(5px, 7px, 0) rotate(0.18deg); }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .brush-mark path, .brush-underline path { animation: none; stroke-dashoffset: 0; }
-    .mini-card { animation: none; transition: box-shadow 0.2s ease; }
-    .status-dot { animation: none; }
-    .mini-cards:hover .mini-card,
-    .mini-card:hover,
-    .mini-card:focus-visible { --spread: 0px; --lift: 0px; --scale: 1; --rx: 0deg; --ry: 0deg; }
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 
-  @media (max-width: 480px) {
-    .bio { padding: 26px 22px 22px; }
+  @media (max-width: 880px) {
+    .site-header { align-items: flex-start; }
+    .hero,
+    .section-grid,
+    .contact-card {
+      grid-template-columns: 1fr;
+    }
+    .hero { min-height: auto; padding-top: 28px; }
+    h1 { max-width: 10ch; }
+    .section-kicker { position: static; }
+    .assistant-body {
+      min-height: 360px;
+      max-height: 360px;
+    }
+  }
+
+  @media (max-width: 620px) {
+    .page { width: min(100% - 28px, 1180px); }
+    .site-header { flex-direction: column; }
+    .nav { justify-content: flex-start; }
+    .capability-grid,
+    .work-card {
+      grid-template-columns: 1fr;
+    }
+    .quick-prompts { grid-template-columns: 1fr; }
+    .assistant-form { grid-template-columns: 1fr; }
+    .section { padding: 64px 0; }
   }
 </style>
 </head>
 <body>
-
-  <main class="page">
-    <svg class="brush-mark" viewBox="0 0 120 60" fill="none">
-      <path d="M8 40 C 30 10, 55 55, 78 22 C 92 4, 105 14, 112 28" />
-    </svg>
-
-    <p class="eyebrow">Hi, 欢迎来到我的小角落</p>
-
-    <h1>
-      我是 Ben，<br>
-      喜欢把
-      <span class="brush-word">
-        想法
-        <svg class="brush-underline" viewBox="0 0 100 14" preserveAspectRatio="none">
-          <path d="M2 8 C 20 3, 35 12, 52 7 C 68 2, 82 10, 97 6" />
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  <div class="page">
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="LiLucky 首页">
+        <svg class="brand-mark" viewBox="0 0 84 48" fill="none" aria-hidden="true">
+          <path d="M6 31 C 19 8, 39 40, 55 17 C 65 3, 75 14, 79 24" />
         </svg>
-      </span>
-      写下来
-    </h1>
-
-    <p class="tagline">
-      这里是我的个人主页。平时会在博客里记录一些思考、折腾过的东西。
-    </p>
-
-    <div class="links">
-      <a class="btn btn-primary" href="https://blog.lilucky.com">读读我的博客 →</a>
-      <a class="btn btn-secondary" href="mailto:contact@lilucky.com">写信给我</a>
-    </div>
-
-    <div class="bio">
-      <div class="tape"></div>
-      <strong>关于我：</strong>一个正在学习把生活和想法写成文字的人。喜欢捣鼓一些小项目，也喜欢慢慢把事情做扎实。如果你恰好路过，欢迎去博客坐坐，或者直接给我写信打个招呼。
-    </div>
-
-    <div class="mini-cards">
-      <a class="mini-card" href="https://komari.600096.xyz/" target="_blank" rel="noopener">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M4 15l4-5 4 3 5-7 3 3" stroke="#b23b2e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="20" cy="9" r="2" fill="#b23b2e"/>
-        </svg>
-        <span class="txt">
-          <span class="t1"><span class="status-dot"></span>站点监控</span>
-          <span class="t2">探针面板</span>
-        </span>
+        <span>LiLucky / Ben</span>
       </a>
-      <a class="mini-card" href="https://t.me/bbmaabot" target="_blank" rel="noopener">
-        <svg class="icon" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="120" cy="120" r="120" fill="#37aee2"/>
-          <path d="M180 72l-19 92c-1.4 6.4-5.2 8-10.6 5l-29-21.4-14 13.5c-1.6 1.6-2.9 2.9-6 2.9l2.1-30.2 55-49.7c2.4-2.1-.5-3.3-3.7-1.2l-68 42.8-29.3-9.2c-6.4-2-6.5-6.4 1.3-9.5l114.6-44.2c5.3-2 10 1.3 8.6 8.8z" fill="#fff"/>
-        </svg>
-        <span class="txt">
-          <span class="t1">即时联系</span>
-          <span class="t2">@bbmaabot</span>
-        </span>
-      </a>
-    </div>
+      <nav class="nav" aria-label="主导航">
+        <a href="#capabilities">能力</a>
+        <a href="#work">作品</a>
+        <a href="#ai-guide">AI 导览</a>
+        <a href="https://xhslink.com/m/2tRGYHOEFiO" target="_blank" rel="noopener">小红书</a>
+        <a href="https://blog.lilucky.com">博客</a>
+        <a href="#contact">联系</a>
+      </nav>
+    </header>
 
-    <footer>
-      <svg class="footer-rule" viewBox="0 0 46 10" fill="none">
-        <path d="M2 5 C 12 0, 20 10, 30 5 C 36 2, 40 6, 44 4" />
-      </svg>
-      lilucky.com · 用心搭建的小小角落
+    <main id="main">
+      <section class="hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Chinese craft / AI systems / brand notes</p>
+          <h1 id="hero-title">把<span class="brush-word">想法</span>做成可运行的作品。</h1>
+          <p class="lead">
+            我是 Ben，也用 LiLucky 记录自己的作品。我长期写中国传统文化美学内容，小红书累计收获 59.6K 次赞与收藏；也在做博客写作、品牌视觉、服务器搭建和 AI 应用。
+          </p>
+        </div>
+
+        <aside class="assistant-panel" id="ai-guide" aria-labelledby="assistant-title">
+          <div class="assistant-head">
+            <div class="assistant-title">
+              <span class="assistant-orb" aria-hidden="true"></span>
+              <span id="assistant-title">LiLucky AI 导览</span>
+            </div>
+            <div class="assistant-tools">
+              <span class="assistant-status">local index</span>
+              <button class="assistant-pin" id="assistantPin" type="button" aria-pressed="false" aria-label="固定 AI 导览卡片">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path fill="currentColor" d="M14.7 2.8 21.2 9l-1.5 1.5-1.7-1.7-4.2 4.2.3 3.9-1.3 1.3-3.5-3.5-4.9 4.9-1.1-1.1 4.9-4.9-3.5-3.5L6 8.8l3.9.3 4.2-4.2-1.7-1.7 1.5-1.5Z"/>
+                </svg>
+                <span>固定</span>
+              </button>
+            </div>
+          </div>
+          <div class="assistant-body" id="assistantMessages" aria-live="polite">
+            <div class="message bot">
+              你好，我可以按你的兴趣推荐入口。你可以问：想看小红书、中国传统文化美学、AI 应用、服务器搭建、品牌设计，或者直接说你想找什么。
+              <div class="message-links">
+                <a href="https://blog.lilucky.com">博客</a>
+                <a href="#work">作品档案</a>
+                <a href="https://xhslink.com/m/2tRGYHOEFiO" target="_blank" rel="noopener">小红书主页</a>
+                <a href="https://komari.600096.xyz/" target="_blank" rel="noopener">探针面板</a>
+              </div>
+            </div>
+            <div class="quick-prompts" aria-label="快捷问题">
+              <button type="button" data-query="小红书主页">小红书主页</button>
+              <button type="button" data-query="中国传统文化美学">传统文化美学</button>
+              <button type="button" data-query="我想看 AI 应用">我想看 AI 应用</button>
+              <button type="button" data-query="服务器搭建有什么">服务器搭建有什么</button>
+              <button type="button" data-query="品牌设计作品">品牌设计作品</button>
+            </div>
+          </div>
+          <form class="assistant-form" id="assistantForm">
+            <label for="assistantInput" hidden>输入问题</label>
+            <input id="assistantInput" name="q" autocomplete="off" placeholder="输入你想了解的方向">
+            <button type="submit">发送</button>
+          </form>
+        </aside>
+      </section>
+
+      <section class="section" id="capabilities" aria-labelledby="capabilities-title">
+        <div class="section-grid">
+          <p class="section-kicker">Capability index</p>
+          <div>
+            <h2 id="capabilities-title">能力不是标签，要能互相接住。</h2>
+            <div class="capability-grid">
+              <article class="capability">
+                <span class="num">01 / Writing</span>
+                <h3>内容写作</h3>
+                <p>把复杂问题写清楚：AI、工具、服务器、设计方法和中文审美。博客是公开的思考记录，也是项目证据库。</p>
+              </article>
+              <article class="capability">
+                <span class="num">02 / Brand</span>
+                <h3>品牌设计</h3>
+                <p>从定位、文字、色彩、字体到视觉秩序，让一个项目有可识别的样子，而不是只有一张好看的图。</p>
+              </article>
+              <article class="capability">
+                <span class="num">03 / Culture</span>
+                <h3>传统文化表达</h3>
+                <p>研究传统色、器物、空间秩序和节气美学，把它们转译成适合现代屏幕和品牌传播的语言。</p>
+              </article>
+              <article class="capability">
+                <span class="num">04 / Systems</span>
+                <h3>AI 与服务器</h3>
+                <p>搭建博客、监控、Bot、自动化工作流和轻量 AI 应用，让想法真正跑起来，并且能被维护。</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="work" aria-labelledby="work-title">
+        <div class="section-grid">
+          <p class="section-kicker">Selected proof</p>
+          <div>
+            <h2 id="work-title">先放能被验证的东西。</h2>
+            <div class="work-list">
+              <article class="work-card">
+                <span class="num">A01</span>
+                <div>
+                  <h3>博客系统</h3>
+                  <p>Astro 博客、RSS、SEO、文章归档和持续维护。这里会逐步沉淀 AI 应用、服务器搭建和设计方法。</p>
+                </div>
+                <a href="https://blog.lilucky.com">打开</a>
+              </article>
+              <article class="work-card">
+                <span class="num">S02</span>
+                <div>
+                  <h3>站点监控</h3>
+                  <p>用探针面板观察服务器状态，把运维能力从幕后放到台前，也让访客知道作品确实运行在真实环境里。</p>
+                </div>
+                <a href="https://komari.600096.xyz/" target="_blank" rel="noopener">查看</a>
+              </article>
+              <article class="work-card">
+                <span class="num">AI03</span>
+                <div>
+                  <h3>AI 应用记录</h3>
+                  <p>记录 AI 课程、工具链、Agent、RAG、Prompt 和自动化实验，把“会用 AI”变成可复盘的方法。</p>
+                </div>
+                <a href="https://blog.lilucky.com/blog/%E6%8E%A8%E8%8D%90ai%E9%80%9A%E8%AF%86%E8%AF%BE/">阅读</a>
+              </article>
+              <article class="work-card">
+                <span class="num">C04</span>
+                <div>
+                  <h3>东方审美研究</h3>
+                  <p>围绕新中式、节气、器物和传统空间秩序做内容与视觉实验，避免把传统文化只做成符号贴纸。</p>
+                </div>
+                <a href="#contact">交流</a>
+              </article>
+              <article class="work-card">
+                <span class="num">X05</span>
+                <div>
+                  <h3>小红书内容主页</h3>
+                  <p>中国传统文化美学是我最稳定的公开内容方向之一，累计获得 59.6K 次赞与收藏。这里可以看到更贴近日常传播语境的选题、文案和审美判断。</p>
+                </div>
+                <a href="https://xhslink.com/m/2tRGYHOEFiO" target="_blank" rel="noopener">访问</a>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="method-title">
+        <div class="section-grid">
+          <p class="section-kicker">Method</p>
+          <div class="method">
+            <h2 id="method-title">先把问题写清楚，再决定视觉。</h2>
+            <p>
+              先让系统跑起来，再打磨体验。审美不是装饰，技术也不是炫技，它们都服务于一个目的：让作品能被理解、能被使用、能被长期维护。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="contact" aria-labelledby="contact-title">
+        <div class="contact-card">
+          <div>
+            <p class="eyebrow">Contact</p>
+            <h2 id="contact-title">适合聊个人品牌、小型数字产品、AI 工作流和中文文化视觉项目。</h2>
+            <p>也可以找我交流小红书内容、博客搭建、服务器监控、Telegram Bot、自动化工具和站点导览机器人。</p>
+          </div>
+          <div class="contact-actions" aria-label="联系方式">
+            <a class="btn btn-primary" href="mailto:contact@lilucky.com">写信给我</a>
+            <a class="btn btn-secondary" href="https://t.me/bbmaabot" target="_blank" rel="noopener" aria-label="通过 Telegram 联系 Ben">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path fill="currentColor" d="M21.9 4.1 18.7 19c-.2 1-.8 1.2-1.6.8l-4.6-3.4-2.2 2.1c-.2.2-.5.5-1 .5l.4-4.9 8.8-8c.4-.3-.1-.5-.6-.2L7 12.8 2.3 11.3c-1-.3-1-1 .2-1.4L20.4 3c.9-.3 1.7.2 1.5 1.1Z"/>
+              </svg>
+              Telegram
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>lilucky.com · 用心搭建的小小角落</span>
+      <span><a href="https://blog.lilucky.com">blog</a> / <a href="https://t.me/bbmaabot" target="_blank" rel="noopener">telegram</a></span>
     </footer>
-  </main>
+  </div>
 
   <script>
     (function () {
-      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (reduce) return;
-      document.querySelectorAll('.mini-card').forEach(function (card) {
-        card.addEventListener('mousemove', function (e) {
-          var r = card.getBoundingClientRect();
-          var px = (e.clientX - r.left) / r.width;
-          var py = (e.clientY - r.top) / r.height;
-          var maxTilt = 10;
-          card.style.setProperty('--ry', ((px - 0.5) * maxTilt * 2).toFixed(2) + 'deg');
-          card.style.setProperty('--rx', ((0.5 - py) * maxTilt * 2).toFixed(2) + 'deg');
+      var messages = document.getElementById('assistantMessages');
+      var form = document.getElementById('assistantForm');
+      var input = document.getElementById('assistantInput');
+      var quickButtons = document.querySelectorAll('[data-query]');
+      var assistantPanel = document.getElementById('ai-guide');
+      var assistantPin = document.getElementById('assistantPin');
+
+      var knowledge = [
+        {
+          keywords: ['小红书', 'xhs', '赞', '收藏', '主页', '内容账号', '账号'],
+          reply: '你可以先看 Ben 的小红书主页。这个账号主要围绕中国传统文化美学展开，累计获得 59.6K 次赞与收藏，适合了解他的选题、审美表达和内容传播能力。',
+          links: [
+            ['小红书主页', 'https://xhslink.com/m/2tRGYHOEFiO'],
+            ['东方审美研究', '#work']
+          ]
+        },
+        {
+          keywords: ['ai', 'AI', '机器人', '应用', 'agent', 'rag', 'prompt', '工作流', '自动化'],
+          reply: '如果你关心 AI 应用，可以先看博客里的 AI 通识课记录，再看首页的作品档案。后续这里会增加 Agent、RAG、提示词和自动化工作流案例。',
+          links: [
+            ['AI 通识课记录', 'https://blog.lilucky.com/blog/%E6%8E%A8%E8%8D%90ai%E9%80%9A%E8%AF%86%E8%AF%BE/'],
+            ['作品档案', '#work']
+          ]
+        },
+        {
+          keywords: ['服务器', '部署', '监控', 'cloudflare', 'vps', '探针', '运维', '搭建'],
+          reply: '服务器方向建议从探针面板看起。它能说明这个网站不是只停在页面设计上，也有部署、监控和维护能力。',
+          links: [
+            ['探针面板', 'https://komari.600096.xyz/'],
+            ['博客', 'https://blog.lilucky.com']
+          ]
+        },
+        {
+          keywords: ['品牌', '设计', '视觉', 'logo', '字体', '色彩', '识别'],
+          reply: '品牌设计会逐步整理成案例：定位、文字、色彩、字体、版式和应用场景。现在可以先看首页的能力矩阵和联系我交流具体项目。',
+          links: [
+            ['能力矩阵', '#capabilities'],
+            ['联系 Ben', '#contact']
+          ]
+        },
+        {
+          keywords: ['传统', '文化', '中国', '东方', '新中式', '节气', '器物', '审美', '美学'],
+          reply: '传统文化美学是这里最重要的内容母题之一。你可以先看小红书主页，再看首页作品档案里关于东方审美研究的说明。',
+          links: [
+            ['小红书主页', 'https://xhslink.com/m/2tRGYHOEFiO'],
+            ['东方审美研究', '#work'],
+            ['联系交流', '#contact']
+          ]
+        },
+        {
+          keywords: ['博客', '文章', '写作', '内容', '记录'],
+          reply: '博客是主要的长文入口，会记录 AI、服务器、设计和中文审美实践。你可以先从最新文章开始看。',
+          links: [
+            ['打开博客', 'https://blog.lilucky.com'],
+            ['全部文章', 'https://blog.lilucky.com/blog']
+          ]
+        }
+      ];
+
+      function appendMessage(text, type, links) {
+        var item = document.createElement('div');
+        item.className = 'message ' + type;
+        item.textContent = text;
+
+        if (links && links.length) {
+          var linkWrap = document.createElement('div');
+          linkWrap.className = 'message-links';
+          links.forEach(function (link) {
+            var a = document.createElement('a');
+            a.href = link[1];
+            a.textContent = link[0];
+            if (link[1].indexOf('http') === 0 && link[1].indexOf(location.hostname) === -1) {
+              a.target = '_blank';
+              a.rel = 'noopener';
+            }
+            linkWrap.appendChild(a);
+          });
+          item.appendChild(linkWrap);
+        }
+
+        messages.insertBefore(item, messages.querySelector('.quick-prompts'));
+        messages.scrollTop = messages.scrollHeight;
+      }
+
+      function answer(query) {
+        var normalized = query.trim();
+        if (!normalized) return;
+
+        appendMessage(normalized, 'user');
+
+        var hit = knowledge.find(function (entry) {
+          return entry.keywords.some(function (keyword) {
+            return normalized.toLowerCase().indexOf(keyword.toLowerCase()) !== -1;
+          });
         });
-        card.addEventListener('mouseleave', function () {
-          card.style.setProperty('--ry', '0deg');
-          card.style.setProperty('--rx', '0deg');
+
+        if (!hit) {
+          appendMessage(
+            '我先把你带到总览：这里按内容写作、品牌设计、传统文化、AI 与服务器四条线组织。你也可以换个关键词继续问我。',
+            'bot',
+            [['能力矩阵', '#capabilities'], ['作品档案', '#work'], ['联系 Ben', '#contact']]
+          );
+          return;
+        }
+
+        appendMessage(hit.reply, 'bot', hit.links);
+      }
+
+      quickButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
+          answer(button.getAttribute('data-query') || '');
         });
       });
+
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        answer(input.value);
+        input.value = '';
+        input.focus();
+      });
+
+      if (assistantPanel && assistantPin) {
+        assistantPin.addEventListener('click', function () {
+          var pinned = assistantPanel.classList.toggle('is-pinned');
+          assistantPin.setAttribute('aria-pressed', String(pinned));
+          assistantPin.querySelector('span').textContent = pinned ? '已固定' : '固定';
+        });
+      }
     })();
   </script>
-
 </body>
 </html>
